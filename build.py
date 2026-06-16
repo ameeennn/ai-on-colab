@@ -48,6 +48,28 @@ models = [
     {"owner": "playgroundai", "model": "playground-v2.5", "parameters": "1024px", "id": "playgroundai/playground-v2.5-1024px-aesthetic", "tier": "Free", "task": "image-generation"},
     {"owner": "kandinsky-community", "model": "kandinsky", "parameters": "2-2", "id": "kandinsky-community/kandinsky-2-2-decoder", "tier": "Free", "task": "image-generation"},
     {"owner": "PixArt-alpha", "model": "PixArt-Sigma", "parameters": "1024", "id": "PixArt-alpha/PixArt-Sigma-XL-2-1024-MS", "tier": "Free", "task": "image-generation"},
+
+    # Code Generation
+    {"owner": "meta-llama", "model": "CodeLlama", "parameters": "7b", "id": "meta-llama/CodeLlama-7b-hf", "tier": "Free", "task": "text-generation"},
+    {"owner": "deepseek-ai", "model": "deepseek-coder", "parameters": "1.3b", "id": "deepseek-ai/deepseek-coder-1.3b-instruct", "tier": "Free", "task": "text-generation"},
+    {"owner": "deepseek-ai", "model": "deepseek-coder", "parameters": "33b", "id": "deepseek-ai/deepseek-coder-33b-instruct", "tier": "Paid", "task": "text-generation"},
+    {"owner": "Qwen", "model": "Qwen2.5-Coder", "parameters": "7B", "id": "Qwen/Qwen2.5-Coder-7B-Instruct", "tier": "Free", "task": "text-generation"},
+    {"owner": "Qwen", "model": "Qwen2.5-Coder", "parameters": "32B", "id": "Qwen/Qwen2.5-Coder-32B-Instruct", "tier": "Paid", "task": "text-generation"},
+    {"owner": "bigcode", "model": "starcoder2", "parameters": "3b", "id": "bigcode/starcoder2-3b", "tier": "Free", "task": "text-generation"},
+    {"owner": "bigcode", "model": "starcoder2", "parameters": "15b", "id": "bigcode/starcoder2-15b", "tier": "Paid", "task": "text-generation"},
+
+    # Audio Generation
+    {"owner": "facebook", "model": "musicgen", "parameters": "medium", "id": "facebook/musicgen-medium", "tier": "Free", "task": "audio-generation"},
+    {"owner": "facebook", "model": "musicgen", "parameters": "stereo-large", "id": "facebook/musicgen-stereo-large", "tier": "Paid", "task": "audio-generation"},
+    {"owner": "suno", "model": "bark", "parameters": "small", "id": "suno/bark-small", "tier": "Free", "task": "audio-generation"},
+    {"owner": "suno", "model": "bark", "parameters": "large", "id": "suno/bark", "tier": "Paid", "task": "audio-generation"},
+
+    # Video Generation
+    {"owner": "stabilityai", "model": "stable-video-diffusion", "parameters": "img2vid-xt", "id": "stabilityai/stable-video-diffusion-img2vid-xt", "tier": "Paid", "task": "video-generation"},
+    {"owner": "zai-org", "model": "CogVideoX", "parameters": "2b", "id": "zai-org/CogVideoX-2b", "tier": "Free", "task": "video-generation"},
+    {"owner": "zai-org", "model": "CogVideoX", "parameters": "5b", "id": "zai-org/CogVideoX-5b", "tier": "Paid", "task": "video-generation"},
+    {"owner": "ali-vilab", "model": "text-to-video-ms", "parameters": "1.7b", "id": "ali-vilab/text-to-video-ms-1.7b", "tier": "Free", "task": "video-generation"},
+
 ]
 
 # GitHub repository details
@@ -112,7 +134,7 @@ def generate_notebook(model_id, task):
              ]
             }
         ]
-    else: # image-generation
+    elif task == "image-generation":
         cells = [
             {
              "cell_type": "markdown",
@@ -158,6 +180,98 @@ def generate_notebook(model_id, task):
               "prompt = \"A beautiful sunset over a serene lake, digital art\"\n",
               "image = pipe(prompt).images[0]\n",
               "image"
+             ]
+            }
+        ]
+    elif task == "audio-generation":
+        cells = [
+            {
+             "cell_type": "markdown",
+             "metadata": {},
+             "source": [
+              f"# Load {model_id} in Google Colab\n",
+              f"This notebook helps you easily load and run the `{model_id}` audio generation model in Google Colab."
+             ]
+            },
+            {
+             "cell_type": "code",
+             "execution_count": None,
+             "metadata": {},
+             "outputs": [],
+             "source": [
+              "!pip install -q -U transformers accelerate scipy"
+             ]
+            },
+            {
+             "cell_type": "code",
+             "execution_count": None,
+             "metadata": {},
+             "outputs": [],
+             "source": [
+              "from transformers import pipeline\n",
+              "import scipy\n",
+              "\n",
+              f"model_id = \"{model_id}\"\n",
+              "\n",
+              "synthesizer = pipeline(\"text-to-audio\", model=model_id, device=0)\n",
+              "\n",
+              "prompt = \"A cheerful upbeat pop song\"\n",
+              "music = synthesizer(prompt, forward_params={\"max_new_tokens\": 256})\n",
+              "\n",
+              "scipy.io.wavfile.write(\"output.wav\", rate=music[\"sampling_rate\"], data=music[\"audio\"])\n",
+              "print(\"Audio saved to output.wav\")"
+             ]
+            }
+        ]
+    elif task == "video-generation":
+        cells = [
+            {
+             "cell_type": "markdown",
+             "metadata": {},
+             "source": [
+              f"# Load {model_id} in Google Colab\n",
+              f"This notebook helps you easily load and run the `{model_id}` video generation model in Google Colab using diffusers."
+             ]
+            },
+            {
+             "cell_type": "code",
+             "execution_count": None,
+             "metadata": {},
+             "outputs": [],
+             "source": [
+              "!pip install -q -U diffusers transformers accelerate"
+             ]
+            },
+            {
+             "cell_type": "code",
+             "execution_count": None,
+             "metadata": {},
+             "outputs": [],
+             "source": [
+              "import torch\n",
+              "from diffusers import DiffusionPipeline\n",
+              "from diffusers.utils import export_to_video\n",
+              "\n",
+              f"model_id = \"{model_id}\"\n",
+              "\n",
+              "pipe = DiffusionPipeline.from_pretrained(\n",
+              "    model_id,\n",
+              "    torch_dtype=torch.float16,\n",
+              "    variant=\"fp16\"\n",
+              ")\n",
+              "pipe = pipe.to(\"cuda\")"
+             ]
+            },
+            {
+             "cell_type": "code",
+             "execution_count": None,
+             "metadata": {},
+             "outputs": [],
+             "source": [
+              "prompt = \"A dog running in the park\"\n",
+              "video_frames = pipe(prompt, num_frames=16).frames[0]\n",
+              "export_to_video(video_frames, \"output.mp4\", fps=7)\n",
+              "print(\"Video saved to output.mp4\")"
              ]
             }
         ]
@@ -252,6 +366,8 @@ def main():
                 <option value="All">All Tasks</option>
                 <option value="text-generation">Text Generation</option>
                 <option value="image-generation">Image Generation</option>
+                <option value="audio-generation">Audio Generation</option>
+                <option value="video-generation">Video Generation</option>
             </select>
         </div>
     </div>
