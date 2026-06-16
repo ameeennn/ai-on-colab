@@ -3,11 +3,42 @@ import json
 
 # List of models to generate
 models = [
-    {"owner": "google", "model": "gemma", "parameters": "2b", "id": "google/gemma-2b"},
-    {"owner": "google", "model": "gemma", "parameters": "7b", "id": "google/gemma-7b"},
-    {"owner": "google", "model": "gemma-4", "parameters": "sb", "id": "google/gemma-7b"},
-    {"owner": "meta-llama", "model": "Meta-Llama-3", "parameters": "8B", "id": "meta-llama/Meta-Llama-3-8B"},
-    {"owner": "mistralai", "model": "Mistral", "parameters": "7B", "id": "mistralai/Mistral-7B-v0.1"},
+    # Original
+    {"owner": "google", "model": "gemma", "parameters": "2b", "id": "google/gemma-2b", "tier": "Free"},
+    {"owner": "google", "model": "gemma", "parameters": "7b", "id": "google/gemma-7b", "tier": "Free"},
+    {"owner": "google", "model": "gemma-4", "parameters": "sb", "id": "google/gemma-7b", "tier": "Free"},
+    {"owner": "meta-llama", "model": "Meta-Llama-3", "parameters": "8B", "id": "meta-llama/Meta-Llama-3-8B", "tier": "Free"},
+    {"owner": "mistralai", "model": "Mistral", "parameters": "7B", "id": "mistralai/Mistral-7B-v0.1", "tier": "Free"},
+
+    # Gemma 2
+    {"owner": "google", "model": "gemma-2", "parameters": "2b", "id": "google/gemma-2-2b", "tier": "Free"},
+    {"owner": "google", "model": "gemma-2", "parameters": "9b", "id": "google/gemma-2-9b", "tier": "Free"},
+    {"owner": "google", "model": "gemma-2", "parameters": "27b", "id": "google/gemma-2-27b", "tier": "Paid"},
+
+    # Gemma 3
+    {"owner": "google", "model": "gemma-3", "parameters": "1b", "id": "google/gemma-3-1b-it", "tier": "Free"},
+    {"owner": "google", "model": "gemma-3", "parameters": "4b", "id": "google/gemma-3-4b-it", "tier": "Free"},
+    {"owner": "google", "model": "gemma-3", "parameters": "12b", "id": "google/gemma-3-12b-it", "tier": "Paid"},
+    {"owner": "google", "model": "gemma-3", "parameters": "27b", "id": "google/gemma-3-27b-it", "tier": "Paid"},
+
+    # Edge (Gemma 3n / Gemma 4 E)
+    {"owner": "google", "model": "gemma-3n", "parameters": "E2B", "id": "google/gemma-3n-E2B-it", "tier": "Free"},
+    {"owner": "google", "model": "gemma-4", "parameters": "E2B", "id": "google/gemma-4-E2B", "tier": "Free"},
+    {"owner": "google", "model": "gemma-4", "parameters": "E4B", "id": "google/gemma-4-E4B", "tier": "Free"},
+
+    # CodeGemma
+    {"owner": "google", "model": "codegemma", "parameters": "2b", "id": "google/codegemma-2b", "tier": "Free"},
+    {"owner": "google", "model": "codegemma", "parameters": "7b", "id": "google/codegemma-7b", "tier": "Free"},
+
+    # MedGemma
+    {"owner": "google", "model": "medgemma", "parameters": "4b", "id": "google/medgemma-4b-it", "tier": "Free"},
+    {"owner": "google", "model": "medgemma", "parameters": "27b", "id": "google/medgemma-27b-it", "tier": "Paid"},
+
+    # PaliGemma
+    {"owner": "google", "model": "paligemma", "parameters": "3b", "id": "google/paligemma-3b-pt-224", "tier": "Free"},
+    {"owner": "google", "model": "paligemma2", "parameters": "3b", "id": "google/paligemma2-3b-pt-224", "tier": "Free"},
+    {"owner": "google", "model": "paligemma2", "parameters": "10b", "id": "google/paligemma2-10b-pt-224", "tier": "Paid"},
+    {"owner": "google", "model": "paligemma2", "parameters": "28b", "id": "google/paligemma2-28b-pt-224", "tier": "Paid"},
 ]
 
 # GitHub repository details
@@ -92,7 +123,7 @@ def generate_notebook(model_id):
     return notebook
 
 def main():
-    readme_content = "# ai-on-colab\n\nRun open source AI models easily in Google Colab.\n\n## Models\n\n| Owner | Model | Parameters | Colab Link |\n|-------|-------|------------|------------|\n"
+    readme_content = "# ai-on-colab\n\nRun open source AI models easily in Google Colab.\n\n## Models\n\n| Tier | Owner | Model | Parameters | Colab Link |\n|------|-------|-------|------------|------------|\n"
 
     html_content = """<!DOCTYPE html>
 <html lang="en">
@@ -107,13 +138,47 @@ def main():
         th { background-color: #f2f2f2; }
         a { color: #0066cc; text-decoration: none; }
         a:hover { text-decoration: underline; }
+        .filter-container { margin-top: 20px; margin-bottom: 20px; }
+        .tier-free { color: green; font-weight: bold; }
+        .tier-paid { color: orange; font-weight: bold; }
     </style>
+    <script>
+        function filterTier() {
+            var select = document.getElementById("tierFilter");
+            var filter = select.value.toUpperCase();
+            var table = document.getElementById("modelsTable");
+            var tr = table.getElementsByTagName("tr");
+
+            for (var i = 1; i < tr.length; i++) {
+                var td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    var txtValue = td.textContent || td.innerText;
+                    if (filter === "ALL" || txtValue.toUpperCase() === filter) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 <body>
     <h1>AI Models on Colab</h1>
     <p>Click on the links below to easily load and run open source AI models in Google Colab.</p>
-    <table>
+
+    <div class="filter-container">
+        <label for="tierFilter"><strong>Filter by Colab Tier:</strong></label>
+        <select id="tierFilter" onchange="filterTier()">
+            <option value="All">All</option>
+            <option value="Free">Free Tier (<= 10B)</option>
+            <option value="Paid">Paid Tier (Pro/Pro+)</option>
+        </select>
+    </div>
+
+    <table id="modelsTable">
         <tr>
+            <th>Tier</th>
             <th>Owner</th>
             <th>Model</th>
             <th>Parameters</th>
@@ -126,6 +191,7 @@ def main():
         model = m["model"]
         params = m["parameters"]
         model_id = m["id"]
+        tier = m["tier"]
 
         dir_path = os.path.join(owner, model)
         os.makedirs(dir_path, exist_ok=True)
@@ -140,10 +206,13 @@ def main():
         posix_filepath = filepath.replace('\\\\', '/')
         colab_link = get_colab_link(posix_filepath)
 
-        readme_content += f"| {owner} | {model} | {params} | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)]({colab_link}) |\n"
+        tier_class = "tier-free" if tier == "Free" else "tier-paid"
+
+        readme_content += f"| {tier} | {owner} | {model} | {params} | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)]({colab_link}) |\n"
 
         html_content += f"""
         <tr>
+            <td class="{tier_class}">{tier}</td>
             <td>{owner}</td>
             <td>{model}</td>
             <td>{params}</td>

@@ -11,13 +11,47 @@
         th { background-color: #f2f2f2; }
         a { color: #0066cc; text-decoration: none; }
         a:hover { text-decoration: underline; }
+        .filter-container { margin-top: 20px; margin-bottom: 20px; }
+        .tier-free { color: green; font-weight: bold; }
+        .tier-paid { color: orange; font-weight: bold; }
     </style>
+    <script>
+        function filterTier() {
+            var select = document.getElementById("tierFilter");
+            var filter = select.value.toUpperCase();
+            var table = document.getElementById("modelsTable");
+            var tr = table.getElementsByTagName("tr");
+
+            for (var i = 1; i < tr.length; i++) {
+                var td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    var txtValue = td.textContent || td.innerText;
+                    if (filter === "ALL" || txtValue.toUpperCase() === filter) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 <body>
     <h1>AI Models on Colab</h1>
     <p>Click on the links below to easily load and run open source AI models in Google Colab.</p>
-    <table>
+
+    <div class="filter-container">
+        <label for="tierFilter"><strong>Filter by Colab Tier:</strong></label>
+        <select id="tierFilter" onchange="filterTier()">
+            <option value="All">All</option>
+            <option value="Free">Free Tier (<= 10B)</option>
+            <option value="Paid">Paid Tier (Pro/Pro+)</option>
+        </select>
+    </div>
+
+    <table id="modelsTable">
         <tr>
+            <th>Tier</th>
             <th>Owner</th>
             <th>Model</th>
             <th>Parameters</th>
@@ -25,6 +59,7 @@
         </tr>
 
         <tr>
+            <td class="tier-free">Free</td>
             <td>google</td>
             <td>gemma</td>
             <td>2b</td>
@@ -32,6 +67,7 @@
         </tr>
 
         <tr>
+            <td class="tier-free">Free</td>
             <td>google</td>
             <td>gemma</td>
             <td>7b</td>
@@ -39,6 +75,7 @@
         </tr>
 
         <tr>
+            <td class="tier-free">Free</td>
             <td>google</td>
             <td>gemma-4</td>
             <td>sb</td>
@@ -46,6 +83,7 @@
         </tr>
 
         <tr>
+            <td class="tier-free">Free</td>
             <td>meta-llama</td>
             <td>Meta-Llama-3</td>
             <td>8B</td>
@@ -53,10 +91,155 @@
         </tr>
 
         <tr>
+            <td class="tier-free">Free</td>
             <td>mistralai</td>
             <td>Mistral</td>
             <td>7B</td>
             <td><a href="https://colab.research.google.com/github/ameeennn/ai-on-colab/blob/main/mistralai/Mistral/7B.ipynb" target="_blank">Open in Colab</a></td>
+        </tr>
+
+        <tr>
+            <td class="tier-free">Free</td>
+            <td>google</td>
+            <td>gemma-2</td>
+            <td>2b</td>
+            <td><a href="https://colab.research.google.com/github/ameeennn/ai-on-colab/blob/main/google/gemma-2/2b.ipynb" target="_blank">Open in Colab</a></td>
+        </tr>
+
+        <tr>
+            <td class="tier-free">Free</td>
+            <td>google</td>
+            <td>gemma-2</td>
+            <td>9b</td>
+            <td><a href="https://colab.research.google.com/github/ameeennn/ai-on-colab/blob/main/google/gemma-2/9b.ipynb" target="_blank">Open in Colab</a></td>
+        </tr>
+
+        <tr>
+            <td class="tier-paid">Paid</td>
+            <td>google</td>
+            <td>gemma-2</td>
+            <td>27b</td>
+            <td><a href="https://colab.research.google.com/github/ameeennn/ai-on-colab/blob/main/google/gemma-2/27b.ipynb" target="_blank">Open in Colab</a></td>
+        </tr>
+
+        <tr>
+            <td class="tier-free">Free</td>
+            <td>google</td>
+            <td>gemma-3</td>
+            <td>1b</td>
+            <td><a href="https://colab.research.google.com/github/ameeennn/ai-on-colab/blob/main/google/gemma-3/1b.ipynb" target="_blank">Open in Colab</a></td>
+        </tr>
+
+        <tr>
+            <td class="tier-free">Free</td>
+            <td>google</td>
+            <td>gemma-3</td>
+            <td>4b</td>
+            <td><a href="https://colab.research.google.com/github/ameeennn/ai-on-colab/blob/main/google/gemma-3/4b.ipynb" target="_blank">Open in Colab</a></td>
+        </tr>
+
+        <tr>
+            <td class="tier-paid">Paid</td>
+            <td>google</td>
+            <td>gemma-3</td>
+            <td>12b</td>
+            <td><a href="https://colab.research.google.com/github/ameeennn/ai-on-colab/blob/main/google/gemma-3/12b.ipynb" target="_blank">Open in Colab</a></td>
+        </tr>
+
+        <tr>
+            <td class="tier-paid">Paid</td>
+            <td>google</td>
+            <td>gemma-3</td>
+            <td>27b</td>
+            <td><a href="https://colab.research.google.com/github/ameeennn/ai-on-colab/blob/main/google/gemma-3/27b.ipynb" target="_blank">Open in Colab</a></td>
+        </tr>
+
+        <tr>
+            <td class="tier-free">Free</td>
+            <td>google</td>
+            <td>gemma-3n</td>
+            <td>E2B</td>
+            <td><a href="https://colab.research.google.com/github/ameeennn/ai-on-colab/blob/main/google/gemma-3n/E2B.ipynb" target="_blank">Open in Colab</a></td>
+        </tr>
+
+        <tr>
+            <td class="tier-free">Free</td>
+            <td>google</td>
+            <td>gemma-4</td>
+            <td>E2B</td>
+            <td><a href="https://colab.research.google.com/github/ameeennn/ai-on-colab/blob/main/google/gemma-4/E2B.ipynb" target="_blank">Open in Colab</a></td>
+        </tr>
+
+        <tr>
+            <td class="tier-free">Free</td>
+            <td>google</td>
+            <td>gemma-4</td>
+            <td>E4B</td>
+            <td><a href="https://colab.research.google.com/github/ameeennn/ai-on-colab/blob/main/google/gemma-4/E4B.ipynb" target="_blank">Open in Colab</a></td>
+        </tr>
+
+        <tr>
+            <td class="tier-free">Free</td>
+            <td>google</td>
+            <td>codegemma</td>
+            <td>2b</td>
+            <td><a href="https://colab.research.google.com/github/ameeennn/ai-on-colab/blob/main/google/codegemma/2b.ipynb" target="_blank">Open in Colab</a></td>
+        </tr>
+
+        <tr>
+            <td class="tier-free">Free</td>
+            <td>google</td>
+            <td>codegemma</td>
+            <td>7b</td>
+            <td><a href="https://colab.research.google.com/github/ameeennn/ai-on-colab/blob/main/google/codegemma/7b.ipynb" target="_blank">Open in Colab</a></td>
+        </tr>
+
+        <tr>
+            <td class="tier-free">Free</td>
+            <td>google</td>
+            <td>medgemma</td>
+            <td>4b</td>
+            <td><a href="https://colab.research.google.com/github/ameeennn/ai-on-colab/blob/main/google/medgemma/4b.ipynb" target="_blank">Open in Colab</a></td>
+        </tr>
+
+        <tr>
+            <td class="tier-paid">Paid</td>
+            <td>google</td>
+            <td>medgemma</td>
+            <td>27b</td>
+            <td><a href="https://colab.research.google.com/github/ameeennn/ai-on-colab/blob/main/google/medgemma/27b.ipynb" target="_blank">Open in Colab</a></td>
+        </tr>
+
+        <tr>
+            <td class="tier-free">Free</td>
+            <td>google</td>
+            <td>paligemma</td>
+            <td>3b</td>
+            <td><a href="https://colab.research.google.com/github/ameeennn/ai-on-colab/blob/main/google/paligemma/3b.ipynb" target="_blank">Open in Colab</a></td>
+        </tr>
+
+        <tr>
+            <td class="tier-free">Free</td>
+            <td>google</td>
+            <td>paligemma2</td>
+            <td>3b</td>
+            <td><a href="https://colab.research.google.com/github/ameeennn/ai-on-colab/blob/main/google/paligemma2/3b.ipynb" target="_blank">Open in Colab</a></td>
+        </tr>
+
+        <tr>
+            <td class="tier-paid">Paid</td>
+            <td>google</td>
+            <td>paligemma2</td>
+            <td>10b</td>
+            <td><a href="https://colab.research.google.com/github/ameeennn/ai-on-colab/blob/main/google/paligemma2/10b.ipynb" target="_blank">Open in Colab</a></td>
+        </tr>
+
+        <tr>
+            <td class="tier-paid">Paid</td>
+            <td>google</td>
+            <td>paligemma2</td>
+            <td>28b</td>
+            <td><a href="https://colab.research.google.com/github/ameeennn/ai-on-colab/blob/main/google/paligemma2/28b.ipynb" target="_blank">Open in Colab</a></td>
         </tr>
 
     </table>
