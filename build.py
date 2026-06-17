@@ -70,6 +70,21 @@ models = [
     {"owner": "zai-org", "model": "CogVideoX", "parameters": "5b", "id": "zai-org/CogVideoX-5b", "tier": "Paid", "task": "video-generation"},
     {"owner": "ali-vilab", "model": "text-to-video-ms", "parameters": "1.7b", "id": "ali-vilab/text-to-video-ms-1.7b", "tier": "Free", "task": "video-generation"},
 
+    # More Text Generation
+    {"owner": "Qwen", "model": "Qwen2.5-Instruct", "parameters": "7B", "id": "Qwen/Qwen2.5-7B-Instruct", "tier": "Free", "task": "text-generation"},
+    {"owner": "meta-llama", "model": "Llama-3.1-Instruct", "parameters": "8B", "id": "meta-llama/Llama-3.1-8B-Instruct", "tier": "Free", "task": "text-generation"},
+    {"owner": "meta-llama", "model": "Llama-3.2-Instruct", "parameters": "3B", "id": "meta-llama/Llama-3.2-3B-Instruct", "tier": "Free", "task": "text-generation"},
+    {"owner": "meta-llama", "model": "Llama-3.2-Instruct", "parameters": "1B", "id": "meta-llama/Llama-3.2-1B-Instruct", "tier": "Free", "task": "text-generation"},
+
+    # More Image Generation
+    {"owner": "Kwai-Kolors", "model": "Kolors", "parameters": "base", "id": "Kwai-Kolors/Kolors", "tier": "Free", "task": "image-generation"},
+    {"owner": "fal", "model": "AuraFlow", "parameters": "base", "id": "fal/AuraFlow", "tier": "Free", "task": "image-generation"},
+
+    # More Audio Generation
+    {"owner": "parler-tts", "model": "parler_tts", "parameters": "mini_v0.1", "id": "parler-tts/parler_tts_mini_v0.1", "tier": "Free", "task": "audio-generation"},
+    {"owner": "facebook", "model": "seamless-m4t", "parameters": "medium", "id": "facebook/seamless-m4t-medium", "tier": "Free", "task": "audio-generation"},
+    {"owner": "facebook", "model": "seamless-m4t", "parameters": "v2-large", "id": "facebook/seamless-m4t-v2-large", "tier": "Paid", "task": "audio-generation"},
+
 ]
 
 # GitHub repository details
